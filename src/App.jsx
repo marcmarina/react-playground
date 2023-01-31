@@ -1,34 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from "react";
+import "./App.css";
+
+import { useMachine } from "@xstate/react";
+import { EVENTS, onboardingStateMachine, STATES } from "./onboarding-machine";
+
+const parentToAhnenDab = {
+  root: 1,
+  father: 2,
+  mother: 3,
+  paternal_father: 4,
+  paternal_mother: 5,
+  maternal_father: 6,
+  maternal_mother: 7,
+};
+
+const ahnenDabToParent = {
+  1: "root",
+  2: "father",
+  3: "mother",
+  4: "paternal_father",
+  5: "paternal_mother",
+  6: "maternal_father",
+  7: "maternal_mother",
+};
+
+const toParent = (ahnenDab) => ahnenDabToParent[ahnenDab];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [state, send] = useMachine(onboardingStateMachine);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <h1>Onboarding</h1>
+      {state.matches(STATES.ADD_PERSON) && (
+        <>
+          <h2>Adding: {toParent(state.context.adding)}</h2>
+          <h2>Selected: {toParent(state.context.current)}</h2>
+          <button
+            onClick={() => {
+              send(EVENTS.PERSON_ADDED);
+            }}
+          >
+            Next
+          </button>
+
+          <button
+            onClick={() => {
+              send(EVENTS.SKIP);
+            }}
+          >
+            Skip
+          </button>
+        </>
+      )}
+      {state.matches(STATES.COMPLETE) && <h2>Complete</h2>}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
