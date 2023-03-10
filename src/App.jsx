@@ -1,59 +1,57 @@
 import React from "react";
 import "./App.css";
 
-import { useMachine } from "@xstate/react";
-import { EVENTS, onboardingStateMachine, STATES } from "./onboarding-machine";
+function dataReducer(state, action) {
+  switch (action.type) {
+    case "FETCHING":
+      return {
+        ...state,
+        loading: true,
+      };
 
-const parentToAhnenDab = {
-  root: 1,
-  father: 2,
-  mother: 3,
-  paternal_father: 4,
-  paternal_mother: 5,
-  maternal_father: 6,
-  maternal_mother: 7,
-};
+    case "DONE":
+      return {
+        ...state,
+        loading: false,
+        data: action.payload,
+      };
 
-const ahnenDabToParent = {
-  1: "root",
-  2: "father",
-  3: "mother",
-  4: "paternal_father",
-  5: "paternal_mother",
-  6: "maternal_father",
-  7: "maternal_mother",
-};
+    default:
+      return state;
+  }
+}
 
-const toParent = (ahnenDab) => ahnenDabToParent[ahnenDab];
+function waitFor(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function App() {
-  const [state, send] = useMachine(onboardingStateMachine);
+  const [state, dispatch] = React.useReducer(dataReducer, {
+    loading: true,
+    data: null,
+  });
+
+  const fetchData = React.useCallback(async () => {
+    dispatch({ type: "FETCHING" });
+
+    await waitFor(2000);
+
+    dispatch({
+      type: "DONE",
+      payload: {
+        name: "John Doe",
+        age: 30,
+      },
+    });
+  }, []);
+
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div>
-      <h1>Onboarding</h1>
-      {state.matches(STATES.ADD_PERSON) && (
-        <>
-          <h2>Adding: {toParent(state.context.adding)}</h2>
-          <h2>Selected: {toParent(state.context.current)}</h2>
-          <button
-            onClick={() => {
-              send(EVENTS.PERSON_ADDED);
-            }}
-          >
-            Next
-          </button>
-
-          <button
-            onClick={() => {
-              send(EVENTS.SKIP);
-            }}
-          >
-            Skip
-          </button>
-        </>
-      )}
-      {state.matches(STATES.COMPLETE) && <h2>Complete</h2>}
+      <h1>{JSON.stringify(state)}</h1>
     </div>
   );
 }
