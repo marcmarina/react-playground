@@ -1,19 +1,17 @@
 import React from "react";
 
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Container, Typography, useTheme } from "@mui/material";
 
 function App() {
   const theme = useTheme();
 
   return (
-    <Box p={3}>
+    <Container>
       <Typography variant="h4" fontWeight={"bold"} textAlign={"center"}>
         Hello world!
       </Typography>
 
       <Box
-        maxWidth={"600px"}
-        margin="auto"
         border={`1px solid ${theme.palette.grey[400]}`}
         borderRadius={1}
         p={2}
@@ -37,7 +35,7 @@ function App() {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 }
 
