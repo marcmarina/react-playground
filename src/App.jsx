@@ -1,11 +1,9 @@
 import React from "react";
 
-import { Box, colors, useTheme } from "@mui/material";
+import { Box, colors } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 function App() {
-  const theme = useTheme();
-
   return (
     <Box p={2} display="flex" justifyContent={"center"}>
       <Grid
@@ -13,7 +11,7 @@ function App() {
         spacing={2}
         sx={{
           flexGrow: 1,
-          maxWidth: theme.breakpoints.values.xl,
+          maxWidth: "lg",
         }}
       >
         {Array(6)
@@ -25,6 +23,7 @@ function App() {
                   sx={{
                     bgcolor: colors.red[(i + 1) * 100],
                     p: 8,
+                    borderRadius: 2,
                   }}
                 >
                   size=8
