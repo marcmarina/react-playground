@@ -1,38 +1,22 @@
 import React from "react";
 
-import { Box, colors } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Container, Typography } from "@mui/material";
 
 function App() {
   return (
-    <Box p={2} display="flex" justifyContent={"center"}>
-      <Grid
-        container
-        spacing={2}
-        sx={{
-          flexGrow: 1,
-          maxWidth: "lg",
-        }}
-      >
-        {Array(6)
-          .fill(0)
-          .map((_, i) => {
-            return (
-              <Grid key={i} size={[12, 6, 3]}>
-                <Box
-                  sx={{
-                    bgcolor: colors.red[(i + 1) * 100],
-                    p: 8,
-                    borderRadius: 2,
-                  }}
-                >
-                  size=8
-                </Box>
-              </Grid>
-            );
-          })}
-      </Grid>
-    </Box>
+    <Container
+      maxWidth="lg"
+      sx={{
+        bgcolor: "hotpink",
+        height: "100vh",
+      }}
+    >
+      <Typography>
+        Ullamco proident ut consectetur ipsum mollit cillum ut quis enim dolore.
+        Officia amet voluptate esse incididunt laborum ex sint in quis. Eu
+        dolore cillum excepteur elit esse qui voluptate ipsum.
+      </Typography>
+    </Container>
   );
 }
 
